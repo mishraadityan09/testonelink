@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Download FlightsMojo</title>
+    
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-XXXXXXX');</script>
+    <!-- End Google Tag Manager -->
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 24px;
+            padding: 50px 40px;
+            max-width: 400px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 25px 70px rgba(0,0,0,0.4);
+        }
+        
+        .card:active {
+            transform: translateY(-2px);
+        }
+        
+        .logo {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 24px;
+            margin: 0 auto 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 50px;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+        
+        h1 {
+            color: #333;
+            font-size: 32px;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        
+        .subtitle {
+            color: #666;
+            font-size: 18px;
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+        
+        .cta {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-size: 20px;
+            font-weight: 600;
+            padding: 20px 40px;
+            border-radius: 16px;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+            transition: all 0.3s ease;
+        }
+        
+        .card:hover .cta {
+            box-shadow: 0 12px 30px rgba(102, 126, 234, 0.5);
+        }
+        
+        .icon {
+            font-size: 28px;
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+        
+        .badge {
+            display: inline-block;
+            background: #f0f0f0;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            color: #666;
+            margin-top: 20px;
+        }
+        
+        @media (max-width: 600px) {
+            .card {
+                padding: 40px 30px;
+            }
+            
+            h1 {
+                font-size: 28px;
+            }
+            
+            .subtitle {
+                font-size: 16px;
+            }
+            
+            .cta {
+                font-size: 18px;
+                padding: 18px 35px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-XXXXXXX"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+    
+    <div class="card" id="download-card" onclick="handleClick()">
+        <div class="logo">✈️</div>
+        <h1>FlightsMojo</h1>
+        <p class="subtitle">Book flights at the best prices</p>
+        
+        <div class="cta">
+            <span class="icon" id="icon">📱</span>
+            <span id="cta-text">Download App</span>
+        </div>
+        
+        <div class="badge" id="platform-badge">Tap to download</div>
+    </div>
+
+    <script>
+        // App Store URLs - Replace with your actual URLs
+        const APP_URLS = {
+            ios: 'https://apps.apple.com/app/id310633997', // Replace with FlightsMojo iOS
+            android: 'https://play.google.com/store/apps/details?id=com.whatsapp', // Replace with FlightsMojo Android
+            desktop: 'https://flightsmojo.com' // Your website
+        };
+
+        let detectedPlatform = 'desktop';
+        let pageLoadTime = Date.now();
+
+        // Initialize dataLayer
+        window.dataLayer = window.dataLayer || [];
+
+        // Detect platform
+        function detectPlatform() {
+            const ua = navigator.userAgent || navigator.vendor || window.opera;
+            
+            if (/iPad|iPhone|iPod/.test(ua) && !window.MSStream) {
+                return 'ios';
+            }
+            if (/android/i.test(ua)) {
+                return 'android';
+            }
+            return 'desktop';
+        }
+
+        // Get referrer source
+        function getReferrerSource() {
+            const referrer = document.referrer.toLowerCase();
+            if (referrer.includes('whatsapp') || referrer.includes('wa.me')) return 'whatsapp';
+            if (referrer.includes('instagram')) return 'instagram';
+            if (referrer.includes('facebook') || referrer.includes('fb.')) return 'facebook';
+            if (referrer.includes('twitter') || referrer.includes('t.co')) return 'twitter';
+            if (referrer.includes('linkedin')) return 'linkedin';
+            if (referrer.includes('telegram')) return 'telegram';
+            if (referrer) return 'other_referrer';
+            return 'direct';
+        }
+
+        // Push to GTM dataLayer
+        function pushEvent(eventName, data) {
+            window.dataLayer.push({
+                event: eventName,
+                ...data
+            });
+            console.log('📊', eventName, data);
+        }
+
+        // Update UI based on platform
+        function updateUI(platform) {
+            const icon = document.getElementById('icon');
+            const ctaText = document.getElementById('cta-text');
+            const badge = document.getElementById('platform-badge');
+            
+            if (platform === 'ios') {
+                icon.textContent = '📱';
+                ctaText.textContent = 'Download for iPhone';
+                badge.textContent = 'iOS App Store';
+            } else if (platform === 'android') {
+                icon.textContent = '🤖';
+                ctaText.textContent = 'Download for Android';
+                badge.textContent = 'Google Play Store';
+            } else {
+                icon.textContent = '🌐';
+                ctaText.textContent = 'Visit Website';
+                badge.textContent = 'Open in Browser';
+            }
+        }
+
+        // Handle click
+        function handleClick() {
+            const url = APP_URLS[detectedPlatform];
+            const timeToClick = ((Date.now() - pageLoadTime) / 1000).toFixed(2);
+            
+            // Track click event
+            pushEvent('download_click', {
+                platform: detectedPlatform,
+                redirect_url: url,
+                time_to_click: timeToClick,
+                referrer_source: getReferrerSource(),
+                user_agent: navigator.userAgent,
+                screen_size: `${window.screen.width}x${window.screen.height}`
+            });
+            
+            // Visual feedback
+            const card = document.getElementById('download-card');
+            card.style.transform = 'scale(0.95)';
+            
+            // Redirect after brief delay
+            setTimeout(() => {
+                window.location.href = url;
+            }, 150);
+        }
+
+        // Initialize on load
+        function init() {
+            detectedPlatform = detectPlatform();
+            updateUI(detectedPlatform);
+            
+            // Get UTM parameters
+            const params = new URLSearchParams(window.location.search);
+            
+            // Track page view
+            pushEvent('page_view', {
+                platform: detectedPlatform,
+                referrer_source: getReferrerSource(),
+                referrer_url: document.referrer || 'none',
+                language: navigator.language,
+                utm_source: params.get('utm_source'),
+                utm_medium: params.get('utm_medium'),
+                utm_campaign: params.get('utm_campaign')
+            });
+        }
+
+        // Track page visibility
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                pushEvent('page_hidden', {
+                    time_visible: ((Date.now() - pageLoadTime) / 1000).toFixed(2)
+                });
+            }
+        });
+
+        // Initialize
+        window.addEventListener('load', init);
+
+        console.log('🚀 FlightsMojo Smart Link Ready');
+    </script>
+</body>
+</html>
